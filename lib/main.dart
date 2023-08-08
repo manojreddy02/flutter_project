@@ -36,15 +36,14 @@ class _NotesHomePageState extends State<NotesHomePage> {
       appBar: AppBar(
         title: Text('Notes App'),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: notes.length,
+        separatorBuilder: (context, index) => Divider(),
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(notes[index].title),
-            subtitle: Text(notes[index].content),
             onTap: () {
-              // Handle tapping on a note (e.g., edit or view the content).
-              // You can implement a new screen to edit/view a note.
+              _viewNoteDetails(context, notes[index]);
             },
           );
         },
@@ -106,4 +105,45 @@ class _NotesHomePageState extends State<NotesHomePage> {
       },
     );
   }
+  }
+
+  void _viewNoteDetails(BuildContext context, Note note) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NoteDetailsPage(note: note),
+      ),
+    );
+  }
+
+class NoteDetailsPage extends StatelessWidget {
+  final Note note;
+
+  NoteDetailsPage({required this.note});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Note Details'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              note.title,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text(
+              note.content,
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
